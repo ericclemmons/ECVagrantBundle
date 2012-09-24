@@ -90,7 +90,7 @@ class VagrantGenerateCommand extends ContainerAwareCommand
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         $dialog = $this->getDialogHelper();
-        $dialog->writeSection($output, 'Welcome to the Symfony2 Vagrant generator');
+        $dialog->writeSection($output, 'Welcome to the Symfony2 Vagrantfile generator');
 
         $output->writeln(array(
             '',
