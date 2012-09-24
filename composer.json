@@ -1,0 +1,24 @@
+{
+    "name":         "ericclemmons/vagrant-bundle",
+    "description":  "Symfony2 bundle to generate a working Vagrant environment",
+    "homepage":     "https://github.com/ericclemmons/ECVagrantBundle",
+    "keywords":     ["vagrant", "generate", "generator"],
+    "type":         "symfony-bundle",
+    "license":      "MIT",
+    "authors": [
+        {
+            "name": "Eric Clemmons",
+            "email": "eric@smarterspam.com"
+        }
+    ],
+    "require": {
+        "sensio/generator-bundle": "2.1.*",
+        "symfony/framework-bundle": "2.1.*",
+        "symfony/console": "2.1.*"
+    },
+    "autoload": {
+        "psr-0": { "EC\\Bundle\\VagrantBundle": "" }
+    },
+    "target-dir": "EC/Bundle/VagrantBundle",
+    "minimum-stability": "dev"
+}
