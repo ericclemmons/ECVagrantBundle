@@ -106,7 +106,7 @@ class VagrantGenerateCommand extends ContainerAwareCommand
             '',
         ));
 
-        $defaultHost    = 'vagrant';
+        $defaultHost    = $input->getOption('host') ?: 'vagrant';
         $host           = $dialog->ask($output, $dialog->getQuestion('Vagrant Hostname', $defaultHost), $defaultHost);
 
         $input->setOption('host', $host);
@@ -118,7 +118,7 @@ class VagrantGenerateCommand extends ContainerAwareCommand
             'You may override the default provided.',
             '',
         ));
-        $defaultIp  = VagrantGenerator::generateIp();
+        $defaultIp  = $input->getOption('ip') ?: VagrantGenerator::generateIp();
         $ip         = $dialog->askAndValidate($output, $dialog->getQuestion('Vagrant IP address', $defaultIp), function($ip) {
             return Validators::validateIp($ip);
         }, false, $defaultIp);
