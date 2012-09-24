@@ -2,42 +2,30 @@
 
 namespace EC\Bundle\VagrantBundle\Command;
 
+use EC\Bundle\VagrantBundle\Entity\Box;
+use EC\Bundle\VagrantBundle\Collection\BoxCollection;
+
 class Validators
 {
-    static public function validateBox($box, array $boxes = array())
+    static public function validateBox($name, BoxCollection $boxes)
     {
-        switch (true) {
-            case empty($box):
-                throw new \InvalidArgumentException('Box must be defined');
-
-            case empty($boxes):
-                return $box;
-
-            case is_numeric($box):
-                $choices    = array_keys($boxes);
-                $key        = $box - 1;
-
-                if (isset($choices[$key])) {
-                    $name = $choices[$key];
-
-                    return $boxes[$name];
-                } else {
-                    throw new \InvalidArgumentException('Invalid choice');
-                }
-
-            case in_array($box, $boxes):
-                return $boxes[$box];
-
-            case filter_var($box, FILTER_VALIDATE_URL):
-                if ('box' === pathinfo($box, PATHINFO_EXTENSION)) {
-                    return $box;
-                } else {
-                    throw new \InvalidArgumentException('Box URL must have .box extension');
-                }
-
-            default:
-                throw new \InvalidArgumentException('Invalid box');
+        if (empty($name)) {
+            throw new \InvalidArgumentException('Box must be defined');
         }
+
+        if (is_numeric($name) && $box = $boxes->getChoice($name)) {
+            return $box;
+        }
+
+        if ($box = $boxes->get($name)) {
+            return $box;
+        }
+
+        if ($url = filter_var($name, FILTER_VALIDATE_URL)) {
+            return Box::fromUrl($url);
+        }
+
+        throw new \InvalidArgumentException('Invalid box');
     }
 
     static public function validateHost($host)

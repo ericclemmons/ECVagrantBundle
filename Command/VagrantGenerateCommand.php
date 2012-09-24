@@ -3,6 +3,7 @@
 namespace EC\Bundle\VagrantBundle\Command;
 
 use EC\Bundle\VagrantBundle\Generator\VagrantGenerator;
+use EC\Bundle\VagrantBundle\Entity\Box;
 use EC\Bundle\VagrantBundle\Repository\BoxRepository;
 use Sensio\Bundle\GeneratorBundle\Command\Helper\DialogHelper;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -46,11 +47,12 @@ class VagrantGenerateCommand extends ContainerAwareCommand
         $ip     = Validators::validateIp($input->getOption('ip'));
         $url    = Validators::validateUrl($input->getOption('url'));
 
-        if (!$input->getOption('box')) {
-            $input->setOption('box', pathinfo($url, PATHINFO_FILENAME));
+        if ($url) {
+            $box = Box::fromUrl($url);
+        } else {
+            $boxes  = $this->getBoxRepository()->findAll();
+            $box    = Validators::validateBox($input->getOption('box'), $boxes);
         }
-
-        $box = Validators::validateBox($input->getOption('box'));
 
         $generated = $this->getGenerator()->generate(getcwd(), compact('host', 'ip', 'box', 'url'));
 
@@ -141,14 +143,10 @@ class VagrantGenerateCommand extends ContainerAwareCommand
             $output->writeln("Existing Vagrant boxes:\n");
         }
 
-        $choices = array();
-
         do {
             if ($boxes) {
-                $choices = array_keys($boxes);
-
-                foreach ($choices as $i => $choice) {
-                    $output->writeln(sprintf('[%s] <info>%s</info>', $i + 1, $choice));
+                foreach ($boxes->getChoices() as $choice => $box) {
+                    $output->writeln(sprintf('[%s] <info>%s</info>', $choice, $box));
                 }
 
                 $output->writeln('');
@@ -165,7 +163,8 @@ class VagrantGenerateCommand extends ContainerAwareCommand
             }
         } while (!$box);
 
-        $input->setOption('box', $box);
+        $input->setOption('box', $box->getName());
+        $input->setOption('url', $box->getUrl());
 
         $output->writeln('');
     }

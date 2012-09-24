@@ -2,6 +2,8 @@
 
 namespace EC\Bundle\VagrantBundle\Repository;
 
+use EC\Bundle\VagrantBundle\Entity\Box;
+use EC\Bundle\VagrantBundle\Collection\BoxCollection;
 use Symfony\Component\DomCrawler\Crawler;
 
 class BoxRepository
@@ -10,13 +12,14 @@ class BoxRepository
 
     private $remoteBoxes;
 
+    public function find($name)
+    {
+        return $this->findAll()->get($name);
+    }
+
     public function findAll()
     {
-        $boxes = array_merge($this->findLocal(), $this->findRemote());
-
-        ksort($boxes);
-
-        return $boxes;
+        return $this->findLocal()->merge($this->findRemote());
     }
 
     public function findLocal()
@@ -24,9 +27,11 @@ class BoxRepository
         if (null === $this->localBoxes) {
             $names = explode("\n", trim(`vagrant box list`));
 
-            $this->localBoxes = array_combine($names, $names);
+            $boxes = array_map(function($name) {
+                return new Box($name);
+            }, $names);
 
-            ksort($this->localBoxes);
+            $this->localBoxes = new BoxCollection($boxes);
         }
 
         return $this->localBoxes;
@@ -35,12 +40,10 @@ class BoxRepository
     public function findRemote()
     {
         if (null === $this->remoteBoxes) {
-            $this->remoteBoxes = array_merge(
-                $this->getLiipBoxes(),
-                $this->getVagrantBoxes()
-            );
+            $this->remoteBoxes = new BoxCollection();
 
-            ksort($this->remoteBoxes);
+            $this->remoteBoxes->merge($this->getLiipBoxes());
+            $this->remoteBoxes->merge($this->getVagrantBoxes());
         }
 
         return $this->remoteBoxes;
@@ -60,10 +63,10 @@ class BoxRepository
             $parts  = explode('liip-', basename($link, '.box'));
             $name   = end($parts);
 
-            $boxes[$name] = $baseHref.$link;
+            $boxes[] = new Box($name, $baseHref.$link);
         }
 
-        return $boxes;
+        return new BoxCollection($boxes);
     }
 
     public function getVagrantBoxes()
@@ -79,6 +82,12 @@ class BoxRepository
             return $node->getElementsByTagName('td')->item(0)->textContent;
         });
 
-        return array_combine($names, $urls);
+        $boxes = array_combine($names, $urls);
+
+        foreach ($boxes as $name => $url) {
+            $boxes[$name] = new Box($name, $url);
+        }
+
+        return new BoxCollection($boxes);
     }
 }

@@ -4,8 +4,8 @@ def Kernel.is_windows
 end
 
 Vagrant::Config.run do |config|
-  config.vm.box       = "{{box}}"
-  {% if url %}config.vm.box_url   = "{{url}}"{% endif %}
+  config.vm.box       = "{{box.name}}"
+  {% if box.url %}config.vm.box_url   = "{{box.url}}"{% endif %}
 
   config.vm.host_name = "{{host}}"
 
