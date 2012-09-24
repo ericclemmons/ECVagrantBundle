@@ -1,6 +1,6 @@
 <?php
 
-namespace EC\Bundle\VagrantBundleRepository;
+namespace EC\Bundle\VagrantBundle\Repository;
 
 use Symfony\Component\DomCrawler\Crawler;
 
