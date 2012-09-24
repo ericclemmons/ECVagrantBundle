@@ -1,0 +1,23 @@
+def Kernel.is_windows
+  processor, platform, *rest = RUBY_PLATFORM.split("-")
+  platform == "mingw32"
+end
+
+Vagrant::Config.run do |config|
+  config.vm.box       = "{{box}}"
+  {% if url %}config.vm.box_url   = "{{url}}"{% endif %}
+
+  config.vm.host_name = "{{host}}"
+
+  # Dedicated IP to avoid conflicts (and no port fowarding!)
+  config.vm.network :hostonly, "{{ip}}"
+
+  # Mount the src folder as NFS for caching & speed
+  config.vm.share_folder("v-root", "/vagrant", ".", :nfs => !Kernel.is_windows)
+
+  config.vm.provision :chef_solo do |chef|
+    chef.cookbooks_path = ["app/cookbooks"]
+
+    chef.add_recipe("wordpress-skeleton");
+  end
+end
