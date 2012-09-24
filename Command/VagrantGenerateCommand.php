@@ -119,7 +119,9 @@ class VagrantGenerateCommand extends ContainerAwareCommand
             '',
         ));
         $defaultIp  = VagrantGenerator::generateIp();
-        $ip         = $dialog->askAndValidate($output, $dialog->getQuestion('Vagrant IP address', $defaultIp), array('EC\Bundle\VagrantBundleCommand\Validators', 'validateIp'), false, $defaultIp);
+        $ip         = $dialog->askAndValidate($output, $dialog->getQuestion('Vagrant IP address', $defaultIp), function($ip) {
+            return Validators::validateIp($ip);
+        }, false, $defaultIp);
 
         $input->setOption('ip', $ip);
 
