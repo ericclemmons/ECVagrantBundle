@@ -80,6 +80,6 @@ class VagrantGeneratorTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Exception');
         // no variables passed
-        $this->generator->generate($this->directory, array());
+        $this->generator->generate('\\///..//non-existing', array());
     }
 }
