@@ -6,6 +6,9 @@ use EC\Bundle\VagrantBundle\Entity\Box;
 use EC\Bundle\VagrantBundle\Generator\VagrantGenerator;
 use PHPUnit_Framework_TestCase;
 
+/**
+ * @covers EC\Bundle\VagrantBundle\Generator\VagrantGenerator
+ */
 class VagrantGeneratorTest extends PHPUnit_Framework_TestCase
 {
     /**
