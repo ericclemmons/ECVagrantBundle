@@ -76,19 +76,19 @@ class BoxRepository
      */
     private function getLiipBoxes()
     {
-        $baseHref   = 'http://vagrantbox.liip.ch/';
-        $crawler    = new Crawler($this->fetchWebpage($baseHref));
-        $links      = $crawler->filter('td a')->reduce(function($node) {
+        $baseUri = 'http://vagrantbox.liip.ch/';
+        $crawler = new Crawler($this->fetchWebpage($baseUri));
+
+        $boxUris = $crawler->filter('td a')->reduce(function($node) {
             return 'box' === pathinfo($node->getAttribute('href'), PATHINFO_EXTENSION);
         })->extract('href');
 
         $boxes = array();
-
-        foreach ($links as $link) {
-            $parts  = explode('liip-', basename($link, '.box'));
+        foreach ($boxUris as $boxUri) {
+            $parts  = explode('liip-', basename($boxUri, '.box'));
             $name   = end($parts);
 
-            $boxes[] = new Box($name, $baseHref.$link);
+            $boxes[] = new Box($name, $baseUri . $boxUri);
         }
 
         return new BoxCollection($boxes);
