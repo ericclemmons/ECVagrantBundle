@@ -79,7 +79,6 @@ class VagrantGeneratorTest extends PHPUnit_Framework_TestCase
     public function testGenerateFailure()
     {
         $this->setExpectedException('Exception');
-        // no variables passed
         $this->generator->generate('\\///..//non-existing', array());
     }
 }
