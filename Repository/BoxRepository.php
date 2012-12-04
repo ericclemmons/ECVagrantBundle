@@ -116,7 +116,10 @@ class BoxRepository
         });
 
         $urls = $rows->each(function($node) {
-            return $node->getElementsByTagName('td')->item(0)->textContent;
+            if ($node->getElementsByTagName('td')->length > 0) {
+                return $node->getElementsByTagName('td')->item(0)->textContent;
+            }
+            return null;
         });
 
         $boxes = array_combine($names, $urls);

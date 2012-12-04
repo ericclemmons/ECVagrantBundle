@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="./Tests/bootstrap.php">
     <php>
-    <!-- <server name="VENDOR_PATH" value="/path/to/symfony" /> -->
+        <!-- <server name="VENDOR_PATH" value="/path/to/symfony" /> -->
     </php>
     <testsuites>
         <testsuite name="ECVagrantBundle Testsuite">
