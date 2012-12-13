@@ -9,6 +9,10 @@ use Guzzle\Service\Client;
 use Guzzle\Http\Exception\HttpException as GuzzleHttpException;
 use Symfony\Component\DomCrawler\Crawler;
 
+/**
+ * @author Eric Clemmons <eric@smarterspam.com>
+ * @author Paul Seiffert <paul.seiffert@gmail.com>
+ */
 class BoxRepository
 {
     /**

@@ -5,6 +5,9 @@ namespace EC\Bundle\VagrantBundle\Command;
 use EC\Bundle\VagrantBundle\Entity\Box;
 use EC\Bundle\VagrantBundle\Collection\BoxCollection;
 
+/**
+ * @author Eric Clemmons <eric@smarterspam.com>
+ */
 class Validators
 {
     static public function validateBox($name, BoxCollection $boxes)
