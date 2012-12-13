@@ -24,3 +24,20 @@ Or provide the options at once:
         --url=http://files.vagrantup.com/lucid32.box
 
 A `Vagrantfile` will be generated in your *current working directory*.
+
+
+Authors
+-------
+
+- [Eric Clemmons][1]
+- [Paul Seiffert][2]
+
+
+License
+-------
+
+MIT
+
+
+[1]: https://github.com/ericclemmons
+[2]: https://github.com/seiffert
