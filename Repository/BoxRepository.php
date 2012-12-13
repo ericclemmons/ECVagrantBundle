@@ -19,7 +19,9 @@ class BoxRepository
 
     public function findAll()
     {
-        return $this->findLocal()->merge($this->findRemote());
+        $local = clone $this->findLocal();
+
+        return $local->merge($this->findRemote());
     }
 
     public function findLocal()
