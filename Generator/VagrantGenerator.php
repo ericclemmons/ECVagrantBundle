@@ -4,6 +4,9 @@ namespace EC\Bundle\VagrantBundle\Generator;
 
 use Sensio\Bundle\GeneratorBundle\Generator\Generator;
 
+/**
+ * @author Eric Clemmons <eric@smarterspam.com>
+ */
 class VagrantGenerator extends Generator
 {
     private $skeletonDir;

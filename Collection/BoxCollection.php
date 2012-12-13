@@ -5,6 +5,9 @@ namespace EC\Bundle\VagrantBundle\Collection;
 use ArrayIterator, Countable, IteratorAggregate;
 use EC\Bundle\VagrantBundle\Entity\Box;
 
+/**
+ * @author Eric Clemmons <eric@smarterspam.com>
+ */
 class BoxCollection implements Countable, IteratorAggregate
 {
     private $boxes = array();
