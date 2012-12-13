@@ -2,6 +2,9 @@
 
 namespace EC\Bundle\VagrantBundle\Entity;
 
+/**
+ * @author Eric Clemmons <eric@smarterspam.com>
+ */
 class Box
 {
     private $name;

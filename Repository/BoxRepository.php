@@ -4,24 +4,47 @@ namespace EC\Bundle\VagrantBundle\Repository;
 
 use EC\Bundle\VagrantBundle\Entity\Box;
 use EC\Bundle\VagrantBundle\Collection\BoxCollection;
+use EC\Bundle\VagrantBundle\Repository\Exception\HttpException;
+use Guzzle\Service\Client;
+use Guzzle\Http\Exception\HttpException as GuzzleHttpException;
 use Symfony\Component\DomCrawler\Crawler;
 
+/**
+ * @author Eric Clemmons <eric@smarterspam.com>
+ * @author Paul Seiffert <paul.seiffert@gmail.com>
+ */
 class BoxRepository
 {
+    /**
+     * @var BoxCollection
+     */
     private $localBoxes;
 
+    /**
+     * @var BoxCollection
+     */
     private $remoteBoxes;
 
+    /**
+     * @param string $name
+     * @return Box
+     */
     public function find($name)
     {
         return $this->findAll()->get($name);
     }
 
+    /**
+     * @return BoxCollection
+     */
     public function findAll()
     {
         return $this->findLocal()->merge($this->findRemote());
     }
 
+    /**
+     * @return BoxCollection
+     */
     public function findLocal()
     {
         if (null === $this->localBoxes) {
@@ -37,6 +60,9 @@ class BoxRepository
         return $this->localBoxes;
     }
 
+    /**
+     * @return BoxCollection
+     */
     public function findRemote()
     {
         if (null === $this->remoteBoxes) {
@@ -49,29 +75,35 @@ class BoxRepository
         return $this->remoteBoxes;
     }
 
+    /**
+     * @return BoxCollection
+     */
     private function getLiipBoxes()
     {
-        $baseHref   = 'http://vagrantbox.liip.ch/';
-        $crawler    = new Crawler(file_get_contents($baseHref));
-        $links      = $crawler->filter('td a')->reduce(function($node) {
+        $baseUri = 'http://vagrantbox.liip.ch/';
+        $crawler = new Crawler($this->fetchWebpage($baseUri));
+
+        $boxUris = $crawler->filter('td a')->reduce(function($node) {
             return 'box' === pathinfo($node->getAttribute('href'), PATHINFO_EXTENSION);
         })->extract('href');
 
         $boxes = array();
-
-        foreach ($links as $link) {
-            $parts  = explode('liip-', basename($link, '.box'));
+        foreach ($boxUris as $boxUri) {
+            $parts  = explode('liip-', basename($boxUri, '.box'));
             $name   = end($parts);
 
-            $boxes[] = new Box($name, $baseHref.$link);
+            $boxes[] = new Box($name, $baseUri . $boxUri);
         }
 
         return new BoxCollection($boxes);
     }
 
+    /**
+     * @return BoxCollection
+     */
     public function getVagrantBoxes()
     {
-        $crawler    = new Crawler(file_get_contents('http://www.vagrantbox.es/'));
+        $crawler    = new Crawler($this->fetchWebpage('http://www.vagrantbox.es/'));
         $rows       = $crawler->filter('table tr');
 
         $names = $rows->each(function($node) {
@@ -89,5 +121,26 @@ class BoxRepository
         }
 
         return new BoxCollection($boxes);
+    }
+
+    /**
+     * @param string $uri
+     * @return string
+     * @throws HttpException
+     */
+    private function fetchWebpage($uri)
+    {
+        $client = new Client();
+
+        $request = $client->get($uri);
+
+        try {
+            $response = $request->send();
+        } catch (GuzzleHttpException $e) {
+            /** @var $e \Exception */
+            throw new HttpException('Could not fetch URI "' . $uri . '".', $e->getCode());
+        }
+
+        return $response->getBody(true);
     }
 }

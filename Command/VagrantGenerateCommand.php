@@ -11,6 +11,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @author Eric Clemmons <eric@smarterspam.com>
+ */
 class VagrantGenerateCommand extends ContainerAwareCommand
 {
     protected $boxRepository;
