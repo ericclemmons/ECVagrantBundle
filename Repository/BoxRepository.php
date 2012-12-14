@@ -39,9 +39,12 @@ class BoxRepository
      */
     public function findAll()
     {
-        $local = clone $this->findLocal();
+        $all = new BoxCollection();
 
-        return $local->merge($this->findRemote());
+        $all->merge($this->findLocal());
+        $all->merge($this->findRemote());
+
+        return $all;
     }
 
     /**
