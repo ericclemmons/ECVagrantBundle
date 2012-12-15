@@ -26,6 +26,6 @@ class VagrantGenerateCommandTest extends PHPUnit_Framework_TestCase
 
     public function testExecuteSuccess()
     {
-
+        $this->markTestIncomplete('Before implementing these tests, we will make the command class more testable.');
     }
 }
