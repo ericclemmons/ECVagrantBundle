@@ -111,16 +111,19 @@ class BoxRepository
         $crawler    = new Crawler($this->fetchWebpage('http://www.vagrantbox.es/'));
         $rows       = $crawler->filter('table tr');
 
-        $names = $rows->each(function($node) {
-            return $node->getElementsByTagName('th')->item(0)->textContent;
-        });
+        $names = $rows->each(
+            function($node) {
+                if (0 <= $node->getElementsByTagName('th')->length) {
+                    return $node->getElementsByTagName('th')->item(0)->textContent;
+                }
+            });
 
-        $urls = $rows->each(function($node) {
-            if ($node->getElementsByTagName('td')->length > 0) {
-                return $node->getElementsByTagName('td')->item(0)->textContent;
-            }
-            return null;
-        });
+        $urls = $rows->each(
+            function($node) {
+                if (0 <= $node->getElementsByTagName('th')->length) {
+                    return $node->getElementsByTagName('th')->item(0)->textContent;
+                }
+            });
 
         $boxes = array_combine($names, $urls);
 
