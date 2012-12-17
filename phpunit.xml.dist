@@ -11,10 +11,10 @@
     stopOnFailure               = "false"
     stopOnError                 = "false"
     syntaxCheck                 = "false"
-    bootstrap="./Tests/bootstrap.php">
+    bootstrap="./Tests/bootstrap.php.dist">
 
     <php>
-        <server name="VENDOR_PATH" value="/path/to/vendor" />
+        <server name="VENDOR_PATH" value="vendor" />
     </php>
     <testsuites>
         <testsuite name="ECVagrantBundle Testsuite">
