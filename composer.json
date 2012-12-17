@@ -9,6 +9,10 @@
         {
             "name": "Eric Clemmons",
             "email": "eric@smarterspam.com"
+        },
+        {
+            "name": "Paul Seiffert",
+            "email": "paul.seiffert@gmail.com"
         }
     ],
     "require": {
@@ -16,6 +20,9 @@
         "symfony/framework-bundle": "2.1.*",
         "symfony/console": "2.1.*",
         "guzzle/guzzle": "*"
+    },
+    "require-dev": {
+        "symfony/class-loader": "2.1.*"
     },
     "autoload": {
         "psr-0": { "EC\\Bundle\\VagrantBundle": "" }
