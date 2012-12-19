@@ -35,13 +35,12 @@ class VagrantGenerator extends Generator
 
     public function generate($dir, $context)
     {
-        $file       = sprintf('%s/Vagrantfile', $dir);
-        $success    = $this->renderFile($this->skeletonDir, 'Vagrantfile', $file, $context);
+        $file = sprintf('%s/Vagrantfile', $dir);
 
-        if ($success) {
-            return array($file);
-        } else {
-            throw new \Exception('Unable to generate '.$file);
+        try {
+            $success = $this->renderFile($this->skeletonDir, 'Vagrantfile', $file, $context);
+        } catch (\Exception $e) {
+            throw new \RuntimeException('Unable to generate '.$file);
         }
     }
 }
